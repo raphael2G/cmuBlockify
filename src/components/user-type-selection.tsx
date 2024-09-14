@@ -1,22 +1,34 @@
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+// add types to selectedUserType and handleUserTypeToggle
+type SelectedUserType = {
+  buyer: boolean
+  seller: boolean
+}
 
-export default function UserType() {
-  const [selectedUserType, setSelectedUserType] = useState({ buyer: false, seller: false })
+// take in selectedUserType and setSelectedUserType as props with types
+export default function UserType({ selectedUserType, setSelectedUserType, onBuyerOrSellerSubmit }: { selectedUserType: SelectedUserType, setSelectedUserType: (type: SelectedUserType) => void , onBuyerOrSellerSubmit: () => void}) {
 
-  const handleUserTypeToggle = (type) => {
+
+  // create handle toggle function that is well typed. have prevstate have a type
+  const handleUserTypeToggle = (type: 'buyer' | 'seller') => {
     setSelectedUserType((prevState) => ({
       ...prevState,
       [type]: !prevState[type],
     }))
   }
 
+
+
+
   const handleConfirm = () => {
     const { buyer, seller } = selectedUserType
     if (!buyer && !seller) {
       alert("Please select at least one option.")
       return
+    } else {
+      onBuyerOrSellerSubmit();
     }
     // Proceed with the next steps
     console.log("User type confirmed:", selectedUserType)
