@@ -54,6 +54,7 @@ export default function SellerDetailsQuestionaire({ onSellerDetailsSubmit }: Sel
       }
       const sellerData = {
         user: user.uid,
+        email: user.email,
         isEligible: true,
         maxSalesInWeek: blocksNumber,
         venmo: venmo.trim(),
