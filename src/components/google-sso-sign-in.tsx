@@ -2,18 +2,57 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { GoogleAuthProvider, signInWithPopup } from "@firebase/auth"
+import { FireAuth } from "@/lib/firebase"
+import { toast } from "sonner"
+import { useRouter } from 'next/navigation'
 
 export function GoogleSsoSignIn() {
-  const signInWithGoogle = () => {
-    // This function should implement the actual Google sign-in logic
-    console.log('Initiating Google sign-in')
-    // Typically, you would call your authentication service here
-    // For example: auth.signInWithGoogle()
-  }
+  const router = useRouter()
+
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(FireAuth, provider);
+
+      // Optionally, handle successful sign-in here
+      console.log("Sign-in successful!");
+      toast.success("Sign-in successful!");
+      router.push('/market')
+    } catch (error) {
+      let errorMessage = "An error occurred. Please try again.";
+  
+      // Handle specific error codes
+      if (error.code) {
+        switch (error.code) {
+          case 'auth/popup-closed-by-user':
+            errorMessage = 'Sign-in popup closed before completing the process.';
+            break;
+          case 'auth/network-request-failed':
+            errorMessage = 'Network error. Please check your internet connection.';
+            break;
+          case 'auth/cancelled-popup-request':
+            // This error can be ignored or handled as per your preference
+            errorMessage = null;
+            break;
+          // Add more cases as needed
+          default:
+            errorMessage = error.message;
+        }
+      }
+  
+      if (errorMessage) {
+        toast.error(errorMessage);
+      }
+      console.error('Sign-in error:', error);
+    }
+  };
+
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md m-3">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Sign in</CardTitle>
           <CardDescription className="text-center">
@@ -22,7 +61,7 @@ export function GoogleSsoSignIn() {
         </CardHeader>
         <CardContent className="flex justify-center">
           <Button 
-            onClick={signInWithGoogle}
+            onClick={() => signInWithGoogle()}
             className="w-full max-w-sm"
             variant="outline"
           >
