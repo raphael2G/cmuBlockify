@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { GoogleAuthProvider, signInWithPopup } from "@firebase/auth"
-import { FireAuth } from "@/lib/firebase"
+import { FireAuth } from "@/firebase/firebase"
 import { toast } from "sonner"
 import { useRouter } from 'next/navigation'
 
