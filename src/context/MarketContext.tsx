@@ -3,7 +3,10 @@ import { useContext, createContext, useState, useEffect } from "react";
 import { UserAuth } from "./AuthContext";
 import UserType from "@/components/user-type-selection";
 import SellerDetailsQuestionaire from "@/components/seller-details-questionaire";
+import { MarketplaceApp } from "@/components/marketplace-app";
 import { searchUserByUid, createUser } from "@/services/userService";
+import { querySellerDetailsByUid } from "@/queries/sellerDetailsQueries";
+
 
 interface MarketInfoContext {
 
@@ -16,6 +19,8 @@ export const MarketContextProvider = ({ children }: any) => {
     const {user, loading} = UserAuth();
     const [showBuyerOrSellerScreen, setShowBuyerOrSellerScreen] = useState(false);
     const [showSellerDetailsScreen, setShowSellerDetailsScreen] = useState(false);
+    const [selectedUserType, setSelectedUserType] = useState({ buyer: false, seller: false })
+
 
     useEffect(() => {
         if (user){
@@ -27,6 +32,15 @@ export const MarketContextProvider = ({ children }: any) => {
             if (userQuery) {
               setShowBuyerOrSellerScreen(false);
               setShowSellerDetailsScreen(false);
+              querySellerDetailsByUid(user.uid).then((sellerDetailsQuery) => {
+                if (sellerDetailsQuery) {
+                  setSelectedUserType({ buyer: true, seller: true });
+                } else {
+                  setSelectedUserType({ buyer: true, seller: false });
+                }
+              });
+
+
             } else {
               setShowBuyerOrSellerScreen(true);
             }
@@ -36,10 +50,6 @@ export const MarketContextProvider = ({ children }: any) => {
 
 
 
-
-
-
-    const [selectedUserType, setSelectedUserType] = useState({ buyer: false, seller: false })
 
     const handleUserTypeToggle = (type) => {
         setSelectedUserType((prevState) => ({
@@ -57,16 +67,17 @@ export const MarketContextProvider = ({ children }: any) => {
 
     const onSellerDetailsSubmit = () => {
       setShowSellerDetailsScreen(false);
+      setShowBuyerOrSellerScreen(false);
+
       // create a user using the createUserService
       const userToAdd = {
         uid: user.uid,
         andrewId: user.email.split('@')[0],
-        email: user.email,
+        email: user.email
       }
 
       createUser(userToAdd).then((response) => {
         console.log(response);});
-
     }
 
 
@@ -79,14 +90,27 @@ export const MarketContextProvider = ({ children }: any) => {
 
 
     if (loading) {
+        console.log("loading");
         return <div>Loading...</div>;
     }
 
     if (!user) {
+      console.log("not user");
+
         return <div>Not logged in</div>;
     }
 
+    if (user && !loading && !showBuyerOrSellerScreen && !showSellerDetailsScreen) {
+      console.log("showMarketplaceApp");
+
+        return (
+          <MarketplaceApp isSeller={selectedUserType.seller}/>
+        );
+    }
+
     if (user && !loading && showBuyerOrSellerScreen) {
+      console.log("showBuyerOrSellerScreen");
+
         return (
           // pass selectedUserType and setSelectedUserType to UserType component
           <UserType selectedUserType={selectedUserType} setSelectedUserType={setSelectedUserType} onBuyerOrSellerSubmit={onBuyerOrSellerSubmit}/>
@@ -94,9 +118,13 @@ export const MarketContextProvider = ({ children }: any) => {
     }
 
     if (user && !loading && showSellerDetailsScreen) {
+      console.log("showSellerDetailsScreen");
+
       return (
         <SellerDetailsQuestionaire onSellerDetailsSubmit={onSellerDetailsSubmit}/>
       );
+
+
   }
 
   return (
