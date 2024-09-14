@@ -4,7 +4,8 @@ import { Order } from "../models/order";
 import { Timestamp } from "firebase/firestore";
 import { 
     addOrderToFirestore, 
-    deleteOrderFromFirestore 
+    deleteOrderFromFirestore , 
+    getAllOrders
 } from "../queries/orderQueries";
 
 
@@ -36,6 +37,17 @@ export const createOrder = async (
 export const deleteOrder = async (orderId: string): Promise<void> => {
     // Additional logic like permission checks can be added here
     await deleteOrderFromFirestore(orderId);
+};
+
+export const fetchUnexpiredOrders = async (): Promise<Array<Order>>=> {
+  try {
+    const orders = await getAllOrders();
+    return orders;
+    console.log('Unexpired Orders:', orders);
+  } catch (error) {
+    console.error('Error retrieving unexpired orders:', error);
+    throw error;
+  }
 };
 
 const validateOrderData = (orderData: Order) => {
