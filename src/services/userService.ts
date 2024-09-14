@@ -1,11 +1,18 @@
 // services/userService.ts
 
-import { addUserToFirestore } from "../queries/userQueries";
 import { User } from "../models/User";
+import { 
+  addUserToFirestore, 
+  queryUserByUid 
+} from "../queries/userQueries";
 
 export const createUser = async (userData: User): Promise<void> => {
   validateUserData(userData);
   await addUserToFirestore(userData);
+};
+
+export const searchUserByUid = async (uid: string): Promise<User | null> => {
+  return queryUserByUid(uid);
 };
 
 const validateUserData = (userData: User) => {
