@@ -1,6 +1,6 @@
 // services/sellerDetailsService.ts
 
-import { SellerDetails } from "../models/SellerDetails";
+import { SellerDetails } from "../models/sellerDetails";
 import { 
     addSellerDetailsToFirestore, 
     updateSellerDetailsInFirestore, 

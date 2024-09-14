@@ -1,6 +1,6 @@
 // services/orderService.ts
 
-import { Order } from "../models/Order";
+import { Order } from "../models/order";
 import { Timestamp } from "firebase/firestore";
 import { 
     addOrderToFirestore, 

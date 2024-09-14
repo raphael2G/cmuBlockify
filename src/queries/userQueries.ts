@@ -2,7 +2,7 @@
 
 import { db } from "../firebase/firebase";
 import { collection, addDoc, query, where, getDocs, limit} from "firebase/firestore";
-import { User } from "../models/User";
+import { User } from "../models/user";
 
 const usersCollection = collection(db, "users");
 

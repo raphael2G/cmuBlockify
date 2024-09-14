@@ -1,6 +1,6 @@
 // services/userService.ts
 
-import { User } from "../models/User";
+import { User } from "../models/user";
 import { 
   addUserToFirestore, 
   queryUserByUid 

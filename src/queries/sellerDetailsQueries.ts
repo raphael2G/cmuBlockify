@@ -2,7 +2,7 @@
 
 import { db } from "../firebase/firebase";
 import { collection, addDoc, doc, updateDoc, deleteDoc, query, getDocs, where } from "firebase/firestore";
-import { SellerDetails } from "../models/SellerDetails";
+import { SellerDetails } from "../models/sellerDetails";
 
 const sellerDetailsCollection = collection(db, "sellerDetails");
 
