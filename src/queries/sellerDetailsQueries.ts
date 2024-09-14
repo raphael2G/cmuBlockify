@@ -45,7 +45,7 @@ try {
 }
 };
 
-export const getEligibleSellerDetails = async (): Promise<SellerDetails[]> => {
+export const queryEligibleSellerDetails = async (): Promise<SellerDetails[]> => {
         const q = query(sellerDetailsCollection, where("isEligible", "==", true));
     try {
       const querySnapshot = await getDocs(q);

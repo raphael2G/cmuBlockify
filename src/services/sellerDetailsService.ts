@@ -5,7 +5,7 @@ import {
     addSellerDetailsToFirestore, 
     updateSellerDetailsInFirestore, 
     deleteSellerDetailsFromFirestore, 
-    getEligibleSellerDetails
+    queryEligibleSellerDetails
 } from "../queries/sellerDetailsQueries";
 
 export const createSellerDetails = async (
@@ -33,7 +33,7 @@ export const deleteSellerDetails = async (sellerId: string): Promise<void> => {
     await deleteSellerDetailsFromFirestore(sellerId);
 };
 
-export const queryEligibleSellerDetails = async (): Promise<SellerDetails[]> => {
+export const getEligibleSellerDetails = async (): Promise<SellerDetails[]> => {
     return await getEligibleSellerDetails();
 };
 
