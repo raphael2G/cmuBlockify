@@ -35,3 +35,4 @@ export const queryUserByUid = async (uid: string): Promise<User | null> => {
     throw error;
   }
 };
+

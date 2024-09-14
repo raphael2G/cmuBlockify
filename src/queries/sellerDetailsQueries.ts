@@ -1,7 +1,7 @@
 // queries/sellerDetailsQueries.ts
 
 import { db } from "../firebase/firebase";
-import { collection, addDoc, doc, updateDoc, deleteDoc, query, getDocs, where } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, deleteDoc, query, getDocs, where, limit } from "firebase/firestore";
 import { SellerDetails } from "../models/sellerDetails";
 
 const sellerDetailsCollection = collection(db, "sellerDetails");
@@ -63,3 +63,23 @@ export const queryEligibleSellerDetails = async (): Promise<SellerDetails[]> => 
       throw error;
     }
   };
+
+export const querySellerDetailsByUid = async (uid: string): Promise<SellerDetails | null> => {
+    const q = query(sellerDetailsCollection, where("user", "==", uid), limit(1));
+    try {
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            return null;
+        }
+
+        const sellerDoc = querySnapshot.docs[0];
+        const sellerData = sellerDoc.data() as SellerDetails;
+        sellerData.id = sellerDoc.id;
+
+        return sellerData;
+    } catch (error) {
+        console.error("Error querying seller details by UID:", error);
+        throw error;
+    }
+};
