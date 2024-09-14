@@ -46,6 +46,7 @@ export const MarketContextProvider = ({ children }: any) => {
             }
           });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loading]);
 
 

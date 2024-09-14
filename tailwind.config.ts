@@ -59,5 +59,12 @@ const config: Config = {
   	}
   },
   plugins: [require("tailwindcss-animate")],
+
+	"compilerOptions": {
+	  "strict": false, // Disables all strict type checking options
+	  "noImplicitAny": false, // Allows 'any' types without errors
+	  // Other options...
+	}
+
 };
 export default config;

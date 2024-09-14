@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -10,7 +10,6 @@ import { Order } from '@/models/order';
 
 import { getEligibleSellerDetails } from '@/services/sellerDetailsService';
 import { fetchUnexpiredOrders, deleteOrder } from '@/services/orderService';
-import { set } from 'firebase/database';
 import { Restaurant } from '@/models/restauraunt';
 import { getRestauraunts } from '@/services/restaurauntService';
 
@@ -19,7 +18,6 @@ export function MarketplaceApp({isSeller}: {isSeller: boolean}) {
   const [showOrderForm, setShowOrderForm] = useState(false)
   const [showFulfillmentForm, setShowFulfillmentForm] = useState(false)
   const [order, setOrder] = useState({ price: '', restaurant: '', details: '' })
-  const restaurauntRef = useRef<Array<string>>(["taste of india", "abp"]);
   const {user} = UserAuth();
   const [sellers, setSellers] = useState<Array<{quantity: number, price: number}>>([]);
   const [buyers, setBuyers] = useState<Array<{quantity: number, price: number}>>([]);

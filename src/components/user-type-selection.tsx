@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 // add types to selectedUserType and handleUserTypeToggle
