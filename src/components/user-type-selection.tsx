@@ -34,7 +34,7 @@ export default function UserType({ selectedUserType, setSelectedUserType, onBuye
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-600 to-pink-600 p-4">
       <Card className="w-full max-w-md flex flex-col h-full">
         <div className="flex flex-col flex-grow">
           <CardHeader className="space-y-1">
