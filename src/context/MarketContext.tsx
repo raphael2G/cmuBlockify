@@ -17,6 +17,7 @@ const MarketInfoContext = createContext<MarketInfoContext>({
 
 export const MarketContextProvider = ({ children }: any) => {
     const {user, loading} = UserAuth();
+    const [awaitingIsSeller, setAwaitingIsSeller] = useState(true);
     const [showBuyerOrSellerScreen, setShowBuyerOrSellerScreen] = useState(false);
     const [showSellerDetailsScreen, setShowSellerDetailsScreen] = useState(false);
     const [selectedUserType, setSelectedUserType] = useState({ buyer: false, seller: false })
@@ -44,6 +45,7 @@ export const MarketContextProvider = ({ children }: any) => {
             } else {
               setShowBuyerOrSellerScreen(true);
             }
+            setAwaitingIsSeller(false);
           });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,6 +66,18 @@ export const MarketContextProvider = ({ children }: any) => {
       if (selectedUserType.seller) {
         setShowSellerDetailsScreen(true);
       }
+
+      // create a user using the createUserService
+      const userToAdd = {
+        uid: user.uid,
+        andrewId: user.email.split('@')[0],
+        email: user.email
+      }
+
+      createUser(userToAdd).then((response) => {
+        console.log(response);
+        console.log("buyer created");
+      });
     };
 
     const onSellerDetailsSubmit = () => {
@@ -90,7 +104,7 @@ export const MarketContextProvider = ({ children }: any) => {
     }, [selectedUserType])
 
 
-    if (loading) {
+    if (loading || awaitingIsSeller) {
         console.log("loading");
         return <div>Loading...</div>;
     }
