@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { GoogleAuthProvider, signInWithPopup } from "@firebase/auth"
+import { GoogleAuthProvider, signInWithPopup, signOut } from "@firebase/auth"
 import { FireAuth } from "@/firebase/firebase"
 import { toast } from "sonner"
 import { useRouter } from 'next/navigation'
@@ -13,12 +13,27 @@ export function GoogleSsoSignIn() {
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(FireAuth, provider);
+      signInWithPopup(FireAuth, provider).then((result) => {
+        const user = result.user;
+        const email = user.email; 
 
-      // Optionally, handle successful sign-in here
-      console.log("Sign-in successful!");
-      toast.success("Sign-in successful!");
-      router.push('/') // this is temporary since we are waiting for more sellers
+        if (email && email.endsWith('@andrew.cmu.edu')) {
+          // The user is authorized
+          // Optionally, handle successful sign-in here
+          console.log("Sign-in successful!");
+          toast.success("Sign-in successful!");
+          router.push('/') // this is temporary since we are waiting for more sellers
+        } else {
+          // Unauthorized user
+          signOut(FireAuth);
+          toast.error('Access is restricted to andrew.cmu.edu email addresses. Please sign in again');
+          router.push('/sign-up') // this is temporary since we are waiting for more sellers
+        }
+      });
+
+
+
+
     } catch (error) {
       let errorMessage = "An error occurred. Please try again.";
   
