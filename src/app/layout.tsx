@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: "CMU Blockify",
     images: [
       {
-        url: "/thumbnail.jpg", // Path to your thumbnail image
+        url: "http://blockify.online/thumbnail.jpg", // Path to your thumbnail image
         width: 800,           // Adjust to your image's dimensions
         height: 600,
         alt: "CMU Blockify Thumbnail",
