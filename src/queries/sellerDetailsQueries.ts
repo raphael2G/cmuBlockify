@@ -83,3 +83,13 @@ export const querySellerDetailsByUid = async (uid: string): Promise<SellerDetail
         throw error;
     }
 };
+
+export const getNumberOfSellers = async (): Promise<number> => {
+    try {
+        const querySnapshot = await getDocs(sellerDetailsCollection);
+        return querySnapshot.size;
+    } catch (error) {
+        console.error("Error getting number of sellers:", error);
+        throw error;
+    }
+}

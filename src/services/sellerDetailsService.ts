@@ -6,7 +6,8 @@ import {
     updateSellerDetailsInFirestore, 
     deleteSellerDetailsFromFirestore, 
     queryEligibleSellerDetails, 
-    querySellerDetailsByUid
+    querySellerDetailsByUid,
+    getNumberOfSellers
 } from "../queries/sellerDetailsQueries";
 
 export const createSellerDetails = async (
@@ -41,6 +42,10 @@ export const getEligibleSellerDetails = async (): Promise<SellerDetails[]> => {
 export const searchForSellerDetailsByUid = async (uid: string): Promise<SellerDetails | null> => {
   return querySellerDetailsByUid(uid);
 };
+
+export const getNumberOfSellersInDatabase = async (): Promise<number> => {
+  return getNumberOfSellers();
+}
 
 const validateSellerDetails = (sellerData: SellerDetails) => {
   if (!sellerData.user) {
