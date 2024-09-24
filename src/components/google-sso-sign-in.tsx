@@ -18,7 +18,7 @@ export function GoogleSsoSignIn() {
       // Optionally, handle successful sign-in here
       console.log("Sign-in successful!");
       toast.success("Sign-in successful!");
-      router.push('/market')
+      router.push('/') // this is temporary since we are waiting for more sellers
     } catch (error) {
       let errorMessage = "An error occurred. Please try again.";
   
@@ -51,7 +51,7 @@ export function GoogleSsoSignIn() {
 
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-600 to-pink-600">
       <Card className="w-full max-w-md m-3">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Sign in</CardTitle>
