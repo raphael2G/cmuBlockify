@@ -15,8 +15,31 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "CMU Blockfiy",
-  description: "The home of trading blocks like commodities",
+  title: "CMU Blockify",
+  description: "The home for trading blocks like commodities",
+  openGraph: {
+    title: "CMU Blockify",
+    description: "The home for trading blocks like commodities",
+    url: "https://blockify.online", // Replace with your actual domain
+    siteName: "CMU Blockify",
+    images: [
+      {
+        url: "/thumbnail.jpg", // Path to your thumbnail image
+        width: 800,           // Adjust to your image's dimensions
+        height: 600,
+        alt: "CMU Blockify Thumbnail",
+        type: "image/jpeg",   // Adjust if your image is not a JPEG
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CMU Blockify",
+    description: "The home for trading blocks like commodities",
+    images: ["/thumbnail.jpg"],
+  },
 };
 
 export default function RootLayout({
@@ -26,18 +49,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" href="/favicon.ico" />
-      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         {children}
         <Toaster richColors />
       </body>
     </html>
   );
 }
-
 
 // export default function RootLayout({
 //   children,
