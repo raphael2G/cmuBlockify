@@ -68,19 +68,20 @@ export const MarketContextProvider = ({ children }: any) => {
       setShowBuyerOrSellerScreen(false);
       if (selectedUserType.seller) {
         setShowSellerDetailsScreen(true);
-      }
+      } else {
+        // don't create if is a seller. we need to ask them questions first
+        // create a user using the createUserService
+        const userToAdd = {
+          uid: user.uid,
+          andrewId: user.email.split('@')[0],
+          email: user.email
+        }
 
-      // create a user using the createUserService
-      const userToAdd = {
-        uid: user.uid,
-        andrewId: user.email.split('@')[0],
-        email: user.email
+        createUser(userToAdd).then((response) => {
+          console.log(response);
+          console.log("buyer created");
+        });
       }
-
-      createUser(userToAdd).then((response) => {
-        console.log(response);
-        console.log("buyer created");
-      });
     };
 
     const onSellerDetailsSubmit = () => {
@@ -121,6 +122,7 @@ export const MarketContextProvider = ({ children }: any) => {
     if (user && !loading && !showBuyerOrSellerScreen && !showSellerDetailsScreen) {
 
       router.push("/thanks");
+      console.log("go to thankyou");
       console.log("showMarketplaceApp");
 
         return (
