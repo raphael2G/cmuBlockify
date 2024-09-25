@@ -32,7 +32,7 @@ export function CircularSignupProgress() {
       navigator.share({
         title: "CMU Blockify - Launching Soon!",
         text: "The block market is going live soon! Sign up now!",
-        url: window.location.href,
+        url: "https://www.blockify.online",
       })
     } else {
       alert("Sharing is not supported on this browser. Please copy the URL manually.")
