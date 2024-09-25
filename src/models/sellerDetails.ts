@@ -5,6 +5,7 @@ export interface SellerDetails {
     isEligible: boolean;
     maxSalesInWeek: number;
     venmo: string;
+    zelle: string;
     minimumPriceToNotify: number;
     salesThisWeek: number;
   }
