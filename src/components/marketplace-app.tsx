@@ -12,7 +12,7 @@ import { getEligibleSellerDetails } from '@/services/sellerDetailsService';
 import { fetchUnexpiredOrders, deleteOrder } from '@/services/orderService';
 import { Restaurant } from '@/models/restauraunt';
 import { getRestauraunts } from '@/services/restaurauntService';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 // add isSeller as prop with boolean
 export function MarketplaceApp({isSeller}: {isSeller: boolean}) {
