@@ -9,6 +9,21 @@ import { Share2, UserPlus, Home } from 'lucide-react';
 
 export function AboutPageComponent() {
   const router = useRouter();
+
+
+  const handleShare = () => {
+    // This is where you'd implement the sharing functionality
+    if (navigator.share) {
+      navigator.share({
+        title: "CMU Blockify - Launching Soon!",
+        text: "The block market is going live soon! Sign up now!",
+        url: "https://www.blockify.online",
+      })
+    } else {
+      alert("Sharing is not supported on this browser. Please copy the URL manually.")
+    }
+  }
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-400 to-purple-500 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
@@ -49,13 +64,13 @@ export function AboutPageComponent() {
             {/* <button onClick={() => router.push("/sign-up")} className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out">
               Sign Up
             </button> */}
+            <Button className="w-full bg-purple-500 hover:bg-purple-600 text-white" onClick={handleShare}>
+              <Share2 className="w-4 h-4 mr-2" />
+              Share with Friends
+            </Button>
             <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white" onClick={() => router.push("/sign-up")}>
               <UserPlus className="w-4 h-4 mr-2" />
               Sign Up
-            </Button>
-            <Button className="w-full bg-purple-500 hover:bg-purple-600 text-white" onClick={() => router.push("/about")}>
-              <Share2 className="w-4 h-4 mr-2" />
-              Share with Friends
             </Button>
             <Button variant="outline" className="w-full text-black" onClick={() => router.push("/")}>
               <Home className="w-4 h-4 mr-2"/>
