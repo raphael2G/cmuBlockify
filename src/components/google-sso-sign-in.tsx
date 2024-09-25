@@ -23,7 +23,7 @@ export function GoogleSsoSignIn() {
           // Optionally, handle successful sign-in here
           console.log("Sign-in successful!");
           toast.success("Sign-in successful!");
-          router.push('/') // this is temporary since we are waiting for more sellers
+          router.push('/market') // this is temporary since we are waiting for more sellers
         } else {
           // Unauthorized user
           signOut(FireAuth);

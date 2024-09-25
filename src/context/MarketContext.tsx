@@ -7,6 +7,7 @@ import { MarketplaceApp } from "@/components/marketplace-app";
 import { searchUserByUid, createUser } from "@/services/userService";
 import { querySellerDetailsByUid } from "@/queries/sellerDetailsQueries";
 
+import { useRouter } from 'next/navigation';
 
 interface MarketInfoContext {
 
@@ -21,6 +22,8 @@ export const MarketContextProvider = ({ children }: any) => {
     const [showBuyerOrSellerScreen, setShowBuyerOrSellerScreen] = useState(false);
     const [showSellerDetailsScreen, setShowSellerDetailsScreen] = useState(false);
     const [selectedUserType, setSelectedUserType] = useState({ buyer: false, seller: false })
+
+    const router = useRouter();
 
 
     useEffect(() => {
@@ -116,6 +119,8 @@ export const MarketContextProvider = ({ children }: any) => {
     }
 
     if (user && !loading && !showBuyerOrSellerScreen && !showSellerDetailsScreen) {
+
+      router.push("/thanks");
       console.log("showMarketplaceApp");
 
         return (

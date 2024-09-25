@@ -12,6 +12,7 @@ import { getEligibleSellerDetails } from '@/services/sellerDetailsService';
 import { fetchUnexpiredOrders, deleteOrder } from '@/services/orderService';
 import { Restaurant } from '@/models/restauraunt';
 import { getRestauraunts } from '@/services/restaurauntService';
+import { useRouter } from 'next/router';
 
 // add isSeller as prop with boolean
 export function MarketplaceApp({isSeller}: {isSeller: boolean}) {
@@ -23,6 +24,8 @@ export function MarketplaceApp({isSeller}: {isSeller: boolean}) {
   const [buyers, setBuyers] = useState<Array<{quantity: number, price: number}>>([]);
   const [potentialOrderToBeFulfilled,  setPotentialOrderToBeFulfilled] = useState<Order | null>(null);
   const [restauraunts, setRestauraunts] = useState<Array<Restaurant>>([]);
+
+  const router = useRouter();
 
   useEffect(() => {
     const groupByPrice = (items: Array<{ price: number }>): Array<{ quantity: number; price: number }> => {
@@ -61,6 +64,7 @@ export function MarketplaceApp({isSeller}: {isSeller: boolean}) {
     getRestauraunts().then(restaurauntes => {
       setRestauraunts(restaurauntes);
     });
+
   }, [showFulfillmentForm, showOrderForm ]);
 
 
