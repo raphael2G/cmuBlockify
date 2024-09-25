@@ -4,6 +4,8 @@ import Image from 'next/image'
 import blueberries from '@/public/blueberries.jpg';
 import { useRouter } from 'next/navigation'
 
+import { Button } from './ui/button';
+import { Share2, UserPlus, Home } from 'lucide-react';
 
 export function AboutPageComponent() {
   const router = useRouter();
@@ -43,10 +45,22 @@ export function AboutPageComponent() {
           <p className="text-sm text-gray-500 text-center">
           Sign up today to start trading blocks!
         </p>
-          <div className="pt-4">
-            <button onClick={() => router.push("/sign-up")} className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out">
+          <div className="grid grid-cols-1 gap-4 w-full">
+            {/* <button onClick={() => router.push("/sign-up")} className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out">
               Sign Up
-            </button>
+            </button> */}
+            <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white" onClick={() => router.push("/sign-up")}>
+              <UserPlus className="w-4 h-4 mr-2" />
+              Sign Up
+            </Button>
+            <Button className="w-full bg-purple-500 hover:bg-purple-600 text-white" onClick={() => router.push("/about")}>
+              <Share2 className="w-4 h-4 mr-2" />
+              Share with Friends
+            </Button>
+            <Button variant="outline" className="w-full text-black" onClick={() => router.push("/")}>
+              <Home className="w-4 h-4 mr-2"/>
+              Back to Home
+            </Button>
           </div>
         </div>
       </div>
