@@ -19,6 +19,7 @@ export default function SellerDetailsQuestionaire({ onSellerDetailsSubmit }: Sel
   const [blocks, setBlocks] = useState<string>('1');
   const [minPrice, setMinPrice] = useState<string>('1');
   const [venmo, setVenmo] = useState('');
+  const [zelle, setZelle] = useState('');
   const [isFormValid, setIsFormValid] = useState(false);
   const { user } = UserAuth();
 
@@ -35,9 +36,9 @@ export default function SellerDetailsQuestionaire({ onSellerDetailsSubmit }: Sel
         !isNaN(minPriceNumber) &&
         minPriceNumber > 0 &&
         Number.isInteger(minPriceNumber) &&
-        venmo.trim() !== ''
+        (venmo.trim() !== '' || zelle.trim() !== '')
     );
-  }, [blocks, minPrice, venmo]);
+  }, [blocks, minPrice, venmo, zelle]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -46,7 +47,6 @@ export default function SellerDetailsQuestionaire({ onSellerDetailsSubmit }: Sel
     const minPriceNumber = parseInt(minPrice, 10);
 
     if (isFormValid) {
-      console.log({ blocksNumber, minPriceNumber, venmo })
 
       // add data to seller preferences
       if (!user?.uid) {
@@ -58,6 +58,7 @@ export default function SellerDetailsQuestionaire({ onSellerDetailsSubmit }: Sel
         isEligible: true,
         maxSalesInWeek: blocksNumber,
         venmo: venmo.trim(),
+        zelle: zelle.trim(),
         minimumPriceToNotify: minPriceNumber,
         salesThisWeek: 0
       };
@@ -124,12 +125,32 @@ export default function SellerDetailsQuestionaire({ onSellerDetailsSubmit }: Sel
               <label htmlFor="venmo" className="text-sm font-medium block text-gray-700">
                 Venmo?
               </label>
+              <p className="text-xs text-gray-500 mb-1">
+                (do not need both venmo and zelle)
+              </p>
               <Input
                 id="venmo"
                 type="text"
                 placeholder="Enter your Venmo username"
                 value={venmo}
                 onChange={(e) => setVenmo(e.target.value)}
+                required
+                className="w-full h-12 text-lg bg-white/50 backdrop-blur-sm border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="zelle" className="text-sm font-medium block text-gray-700">
+                Zelle?
+              </label>
+              <p className="text-xs text-gray-500 mb-1">
+                (do not need both venmo and zelle)
+              </p>
+              <Input
+                id="zelle"
+                type="text"
+                placeholder="Enter your Zelle username"
+                value={zelle}
+                onChange={(e) => setZelle(e.target.value)}
                 required
                 className="w-full h-12 text-lg bg-white/50 backdrop-blur-sm border-gray-300 focus:border-purple-500 focus:ring-purple-500"
               />
