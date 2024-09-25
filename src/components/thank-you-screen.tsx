@@ -4,7 +4,16 @@ import { Mail, Share2, Home, Info } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from 'next/navigation'
 
+// confetti
+import React from 'react'
+import useWindowSize from 'react-use/lib/useWindowSize'
+import Confetti from 'react-confetti'
+
+
 export function ThankYouScreenComponent() {
+
+  const { width, height } = useWindowSize()
+
 
   const router = useRouter()
 
@@ -24,6 +33,10 @@ export function ThankYouScreenComponent() {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center p-4">
+      <Confetti
+      width={width}
+      height={height}
+      />
       <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">
         <div className="flex flex-col items-center text-center">
           <Mail className="w-16 h-16 text-purple-500 mb-4" />
