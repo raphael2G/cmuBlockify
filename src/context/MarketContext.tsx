@@ -121,7 +121,7 @@ export const MarketContextProvider = ({ children }: any) => {
 
     if (user && !loading && !showBuyerOrSellerScreen && !showSellerDetailsScreen) {
 
-      router.push("/thanks");
+      // router.push("/thanks");
       console.log("go to thankyou");
       console.log("showMarketplaceApp");
 
