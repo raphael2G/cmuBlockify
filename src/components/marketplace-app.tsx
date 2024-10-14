@@ -315,7 +315,7 @@ const handleAccountSettingsChange = (field: string, value: string | number) => {
                 <div className="flex justify-between">
 
                 <Button 
-                    onClick={() => {setShowVenmo(!showVenmo); setShowZelle(!showZelle)}} 
+                    onClick={() => {setShowVenmo(!(showVenmo && showZelle)); setShowZelle(!(showVenmo && showZelle))}} 
                     className={`w-[32%] ${showVenmo && showZelle ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 hover:bg-gray-400'} text-white`}
                   >
                     {showVenmo && showZelle ? 'Displaying all orders' : 'Hiding some orders'}
