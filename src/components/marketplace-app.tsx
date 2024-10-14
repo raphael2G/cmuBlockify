@@ -34,8 +34,8 @@ export function MarketplaceApp({isSeller}: {isSeller: boolean}) {
   const [venmoSellers, setVenmoSellers]=  useState<Array<{quantity: number, price: number}>>([]);
   const [zelleSellers, setZelleSellers] = useState<Array<{quantity: number, price: number}>>([]);
   const [venmoOrZelleSellers, setVenmoOrZelleSellers] = useState<Array<{quantity: number, price: number}>>([]);
-  const [showVenmo, setShowVenmo] = useState(false);
-  const [showZelle, setShowZelle] = useState(false);
+  const [showVenmo, setShowVenmo] = useState(true);
+  const [showZelle, setShowZelle] = useState(true);
 
   const [buyers, setBuyers] = useState<Array<{quantity: number, price: number}>>([]);
   const [potentialOrderToBeFulfilled,  setPotentialOrderToBeFulfilled] = useState<Order | null>(null);
