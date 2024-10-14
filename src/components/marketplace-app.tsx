@@ -11,6 +11,7 @@ import { Settings } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import AccountSettingsDialog from './account-settings-dialog';
+import HelpDialog from './help-dialog';
 
 import { UserAuth } from "@/context/AuthContext";
 import { createOrder } from '@/services/orderService';
@@ -26,6 +27,7 @@ import { getRestauraunts } from '@/services/restaurauntService';
 // add isSeller as prop with boolean
 export function MarketplaceApp({isSeller}: {isSeller: boolean}) {
   const [showOrderForm, setShowOrderForm] = useState(false)
+  const [showMakretDisplay, setShowMarketDisplay] = useState(false)
   const [showFulfillmentForm, setShowFulfillmentForm] = useState(false)
   const [order, setOrder] = useState({ price: '', restaurant: '', details: '' })
   const {user} = UserAuth();
@@ -36,6 +38,8 @@ export function MarketplaceApp({isSeller}: {isSeller: boolean}) {
   const [venmoOrZelleSellers, setVenmoOrZelleSellers] = useState<Array<{quantity: number, price: number}>>([]);
   const [showVenmo, setShowVenmo] = useState(true);
   const [showZelle, setShowZelle] = useState(true);
+
+
 
   const [buyers, setBuyers] = useState<Array<{quantity: number, price: number}>>([]);
   const [potentialOrderToBeFulfilled,  setPotentialOrderToBeFulfilled] = useState<Order | null>(null);
@@ -204,7 +208,9 @@ const handleAccountSettingsChange = (field: string, value: string | number) => {
         
         
         <div className="flex-grow overflow-y-auto mb-4">
+          
         <AccountSettingsDialog />
+        <HelpDialog />
 
           {!showOrderForm && !showFulfillmentForm && (
             <div className="mb-4 overflow-y-auto max-h-[60vh]">
@@ -301,26 +307,62 @@ const handleAccountSettingsChange = (field: string, value: string | number) => {
 
         {!showOrderForm && !showFulfillmentForm && (
           <div className="mt-auto mb-2">
-            <div className="flex justify-between mb-2">
+              
+              <div className="space-y-2">
+
+                {}
+
+                <div className="flex justify-between">
+
+                <Button 
+                    onClick={() => {setShowVenmo(!showVenmo); setShowZelle(!showZelle)}} 
+                    className={`w-[32%] ${showVenmo && showZelle ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 hover:bg-gray-400'} text-white`}
+                  >
+                    {showVenmo && showZelle ? 'Displaying all orders' : 'Hiding some orders'}
+                  </Button>
+                  
+                  <Button 
+                    onClick={() => setShowVenmo(!showVenmo)} 
+                    className={`w-[32%] ${showVenmo ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 hover:bg-gray-400'} text-white`}
+                  >
+                    {showVenmo ? 'Displaying Venmo' : 'Hiding Venmo'}
+                  </Button>
+                  <Button 
+                    onClick={() => setShowZelle(!showZelle)} 
+                    className={`w-[32%] ${showZelle ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 hover:bg-gray-400'} text-white`}
+                  >
+                    {showZelle ? 'Displaying Zelle' : 'Hiding Zelle'}
+                  </Button>
+                </div>
+
+              { isSeller ?  (
+                <>
+                  <Button 
+                    // onClick={handleFulfillVenmo} 
+                    className="w-full bg-purple-500 hover:bg-purple-600 text-white"
+                  >
+                    Fulfill Venmo Order (${10})
+                  </Button>
+                  <Button 
+                    // onClick={handleFulfillZelle} 
+                    className="w-full bg-purple-500 hover:bg-purple-600 text-white"
+                  >
+                    Fulfill Zelle Order (${10})
+                  </Button>
+                </>
+              ): 
               <Button 
-                onClick={() => setShowVenmo(!showVenmo)} 
-                className={`w-[48%] ${showVenmo ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 hover:bg-gray-400'} text-white`}
+                  onClick={() => setShowOrderForm(true)} 
+                  className="w-full bg-blue-500 hover:bg-blue-600 text-white"
               >
-                Venmo {showVenmo ? 'ON' : 'OFF'}
-              </Button>
-              <Button 
-                onClick={() => setShowZelle(!showZelle)} 
-                className={`w-[48%] ${showZelle ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 hover:bg-gray-400'} text-white`}
-              >
-                Zelle {showZelle ? 'ON' : 'OFF'}
-              </Button>
-            </div>
-            <Button 
-              onClick={() => setShowOrderForm(true)} 
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white"
-            >
-              Place Order
+                  Place Order
             </Button>
+              }
+
+              </div>
+
+
+
           </div>
         )}
       </div>
