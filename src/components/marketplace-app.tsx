@@ -19,10 +19,13 @@ import { Order } from '@/models/order';
 
 import { getEligibleSellerDetails } from '@/services/sellerDetailsService';
 import { fetchUnexpiredOrders, deleteOrder } from '@/services/orderService';
-import { Restaurant } from '@/models/restauraunt';
-import { getRestauraunts } from '@/services/restaurauntService';
 
-
+import MarketplaceHeader from '@/components/marketplace/marketplace-header';
+import MarketList from '@/components/marketplace/market-list';
+import OrderForm from '@/components/marketplace/order-placement-form';
+import FulfillmentForm from '@/components/marketplace/FullfilmentForm';
+import FilterButtons from '@/components/marketplace/market-filter-butons';
+import ActionButtons from '@/components/marketplace/Market-Action-Buttons';
 
 // add isSeller as prop with boolean
 export function MarketplaceApp({isSeller}: {isSeller: boolean}) {
@@ -43,7 +46,6 @@ export function MarketplaceApp({isSeller}: {isSeller: boolean}) {
 
   const [buyers, setBuyers] = useState<Array<{quantity: number, price: number}>>([]);
   const [potentialOrderToBeFulfilled,  setPotentialOrderToBeFulfilled] = useState<Order | null>(null);
-  const [restauraunts, setRestauraunts] = useState<Array<Restaurant>>([]);
 
 
   const [accountSettings, setAccountSettings] = useState({
@@ -122,9 +124,6 @@ const handleAccountSettingsChange = (field: string, value: string | number) => {
       setBuyers(groupedBuyers);
     });
 
-    getRestauraunts().then(restaurauntes => {
-      setRestauraunts(restaurauntes);
-    });
 
   }, [showFulfillmentForm, showOrderForm ]);
 
@@ -181,19 +180,7 @@ const handleAccountSettingsChange = (field: string, value: string | number) => {
   }
 
 
-  const handleOrderFulfilment = () => {
-    // delete the order from the database
-    if (potentialOrderToBeFulfilled?.id){
-      deleteOrder(potentialOrderToBeFulfilled.id);
-      setShowFulfillmentForm(false);
-      console.log("successfully completed fulfilled order");
-      console.log(potentialOrderToBeFulfilled);
 
-    }
-
-    // make call for backend to send email so the two can communicate
-
-  }
 
 
 
@@ -201,170 +188,61 @@ const handleAccountSettingsChange = (field: string, value: string | number) => {
     <div className="min-h-screen bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center p-4">
 
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden h-[90vh] p-4 flex flex-col relative">
-        <h1 className="text-xl font-bold mb-4 text-center text-gray-800">
-          {showOrderForm ? 'Place an Order' : (showFulfillmentForm ? 'Fulfill this Order?' : 'Current Market')}
-        </h1>
 
-        
+        <MarketplaceHeader title={showOrderForm ? 'Place an Order' : (showFulfillmentForm ? 'Fulfill this Order?' : 'Current Market')} />
         
         <div className="flex-grow overflow-y-auto mb-4">
-          
-        <AccountSettingsDialog />
-        <HelpDialog />
-
+        
+          {/* // market display */}
           {!showOrderForm && !showFulfillmentForm && (
-            <div className="mb-4 overflow-y-auto max-h-[60vh]">
-              {currentSellers.map((seller, index) => (
-                <div key={`seller-${index}`} className="flex  justify-between items-center mb-2 bg-gradient-to-r from-green-400 to-green-500 p-2 rounded-lg shadow-md">
-                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-green-600 font-bold text-sm">
-                    {seller.quantity}
-                  </div>
-                  <span className="text-white font-medium text-sm"> sellers at </span>
-                  <div className="bg-white px-2 py-1 rounded-full text-green-600 font-bold text-sm">
-                    ${seller.price}
-                  </div>
-                </div>
-              ))}
-              {buyers.map((buyer, index) => (
-                <div key={`buyer-${index}`} onClick={sellerFulfilment} className="flex  justify-between items-center mb-2 bg-gradient-to-r from-red-400 to-red-500 p-2 rounded-lg shadow-md">
-                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-red-600 font-bold text-sm">
-                    {buyer.quantity}
-                  </div>
-                  <span className="text-white font-medium text-sm">buyers at</span>
-                  <div className="bg-white px-2 py-1 rounded-full text-red-600 font-bold text-sm">
-                    ${buyer.price}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <MarketList 
+              sellers={currentSellers}
+              buyers={buyers}
+              onSellerClick={sellerFulfilment}
+            />
           )}
 
+          {/* // fulfilment form */}
           {showFulfillmentForm && (
-            <div className="bg-white rounded-lg shadow-lg p-4 text-black">
-              <Input
-                type="number"
-                placeholder="Price"
-                value={potentialOrderToBeFulfilled?.price}
-                onChange={(e) => setOrder({ ...order, price: e.target.value })}
-                className="mb-3 text-black"
-              />
-              <Select >
-                <SelectTrigger className="mb-3">
-                  <SelectValue placeholder={potentialOrderToBeFulfilled?.restaurant} />
-                </SelectTrigger>
-
-              </Select>
-              <textarea
-                placeholder={potentialOrderToBeFulfilled?.order}
-                value={potentialOrderToBeFulfilled?.order}
-                onChange={(e) => setOrder({ ...order, details: e.target.value })}
-                className="w-full p-2 border rounded mb-3 resize-none text-sm text-black "
-                rows={3}
-              />
-              <Button onClick={handleOrderFulfilment} className="w-full bg-blue-500 hover:bg-blue-600 text-white">
-                Fulfil this Order
-              </Button>
-            </div>
+            <FulfillmentForm
+              onFulfillmentComplete={() => setShowFulfillmentForm(false)}
+            />
           )}
 
+          {/* // order form */}
           {showOrderForm && (
-            <div className="bg-white rounded-lg shadow-lg p-4 text-black">
-              <Input
-                type="number"
-                placeholder="Price"
-                value={parseInt(order.price, 10)}
-                onChange={(e) => setOrder({ ...order, price: e.target.value })}
-                className="mb-3 text-black"
-              />
-              <Select onValueChange={(value) => setOrder({ ...order, restaurant: value })}>
-                <SelectTrigger className="mb-3">
-                  <SelectValue placeholder="Select Restaurant" />
-                </SelectTrigger>
-                <SelectContent>
-                  {restauraunts.map((restaurant, index) => (
-                    <SelectItem key={`restaurant-${index}`} value={restaurant.name}>
-                      {restaurant.name}
-                    </SelectItem>
-                  ))}
-                  {/* <SelectItem value="restaurant1">Restaurant 1</SelectItem>
-                  <SelectItem value="restaurant2">Restaurant 2</SelectItem>
-                  <SelectItem value="restaurant3">Restaurant 3</SelectItem> */}
-                </SelectContent>
-              </Select>
-              <textarea
-                placeholder="Order details"
-                value={order.details}
-                onChange={(e) => setOrder({ ...order, details: e.target.value })}
-                className="w-full p-2 border rounded mb-3 resize-none text-sm"
-                rows={3}
-              />
-              <Button onClick={handlePlaceOrder} className="w-full bg-blue-500 hover:bg-blue-600 text-white">
-                Place Order
-              </Button>
-            </div>
+            <OrderForm 
+              order={order}
+              setOrder={setOrder}
+              onSubmit={handlePlaceOrder}
+            />
           )} 
-        </div>
 
+        </div>
+        
+        {/* // Buttons for seller and buyer on bottom of screen */}
         {!showOrderForm && !showFulfillmentForm && (
           <div className="mt-auto mb-2">
-              
               <div className="space-y-2">
+                <FilterButtons
+                  showVenmo={showVenmo}
+                  showZelle={showZelle}
+                  toggleVenmo={() => setShowVenmo(!showVenmo)}
+                  toggleZelle={() => setShowZelle(!showZelle)}
+                  toggleAll={() => {setShowVenmo(!(showVenmo && showZelle)); setShowZelle(!(showVenmo && showZelle))}}/>
 
-                {}
-
-                <div className="flex justify-between">
-
-                <Button 
-                    onClick={() => {setShowVenmo(!(showVenmo && showZelle)); setShowZelle(!(showVenmo && showZelle))}} 
-                    className={`w-[32%] ${showVenmo && showZelle ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 hover:bg-gray-400'} text-white`}
-                  >
-                    {showVenmo && showZelle ? 'Displaying all orders' : 'Hiding some orders'}
-                  </Button>
-                  
-                  <Button 
-                    onClick={() => setShowVenmo(!showVenmo)} 
-                    className={`w-[32%] ${showVenmo ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 hover:bg-gray-400'} text-white`}
-                  >
-                    {showVenmo ? 'Displaying Venmo' : 'Hiding Venmo'}
-                  </Button>
-                  <Button 
-                    onClick={() => setShowZelle(!showZelle)} 
-                    className={`w-[32%] ${showZelle ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 hover:bg-gray-400'} text-white`}
-                  >
-                    {showZelle ? 'Displaying Zelle' : 'Hiding Zelle'}
-                  </Button>
-                </div>
-
-              { isSeller ?  (
-                <>
-                  <Button 
-                    // onClick={handleFulfillVenmo} 
-                    className="w-full bg-purple-500 hover:bg-purple-600 text-white"
-                  >
-                    Fulfill Venmo Order (${10})
-                  </Button>
-                  <Button 
-                    // onClick={handleFulfillZelle} 
-                    className="w-full bg-purple-500 hover:bg-purple-600 text-white"
-                  >
-                    Fulfill Zelle Order (${10})
-                  </Button>
-                </>
-              ): 
-              <Button 
-                  onClick={() => setShowOrderForm(true)} 
-                  className="w-full bg-blue-500 hover:bg-blue-600 text-white"
-              >
-                  Place Order
-            </Button>
-              }
+                <ActionButtons 
+                  isSeller={isSeller}
+                  venmoPrice={10}
+                  zellePrice={10}
+                  onFulfillVenmo={() => alert("fulfil venmo needs implemented")} 
+                  onFulfillZelle={() => alert("fulfil zelle needs implemented")} 
+                  onPlaceOrder={() => setShowOrderForm(true)}/>
 
               </div>
-
-
-
           </div>
         )}
+
       </div>
 
     </div>
